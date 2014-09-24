@@ -12,23 +12,21 @@
 (defn apply-metric-series [template-event metrics] (map #(assoc template-event :metric %) metrics))
 
 (def cycle-1-10
-  (apply-metric-series {:service "debug-metric-series" :ttl 5 :description "cycling metric 1..10"}
+  (apply-metric-series {:service "test-cycle-1-10" :ttl 5 :description "cycling metric 1..10"}
           (cycle [0 1 2 3 4 5 6 7 8 9])))
 
 (def spike-every-100
-  (apply-metric-series {:service "debug-metric-series" :ttl 5 :description "spike every 100"}
+  (apply-metric-series {:service "test-spike-every-100" :ttl 5 :description "spike every 100"}
           (cycle (conj (take 99 (cycle [0 1 2 3])) 9))))
 
 (def strange-message-every-100
-  (cycle (conj (repeat 99 {:service "debug-metric-series" :ttl 5 :description "just another message"})
-               {:service "debug-metric-series" :description "wohoo, this is strange!"})))
+  (cycle (conj (repeat 99 {:service "test-strange-message" :ttl 5 :description "just another message"})
+               {:service "test-strange-message" :description "wohoo, this is strange!"})))
 
 
 ;;function calls below will be evaluated when this file is loaded (using C-c C-k in emacs/CIDER)
 
-(burst! 100 (apply-metric-series {:service "debug-metric-series" :description "hello!"} [1 2 3 4 5]))
-
-#_(burst! 100 (take 20 cycle-1-10))
+(burst! 100 (apply-metric-series {:service "test-12345" :description "hello!"} [1 2 3 4 5]))
 
 #_(burst! 20 (take 300 spike-every-100))
 
